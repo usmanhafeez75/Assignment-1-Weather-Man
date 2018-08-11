@@ -1,3 +1,8 @@
+.idea/
+weatherdata.zip
+weatherdata/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
