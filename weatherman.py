@@ -10,10 +10,13 @@ files_prefix = 'lahore_weather_'
 min_year = 1996
 max_year = 2011
 
-elements_indices_dict = dict()
+elements_indices_dict = dict()      #Dictionary for mapping from element name to the element index in the sequence of elements
 
 
 def set_elements_indices(elements_str):
+    """Initialize the elements_indices_dict according to the comma separated elements names
+     given in the string
+     """
     elements_indices_dict.clear()
     elements = elements_str.split(',')
 
