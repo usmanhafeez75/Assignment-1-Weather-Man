@@ -41,6 +41,7 @@ def get_file_contents_line_by_line(file_path):
         elif len(line) > 25:
             if not elements_indices_dict:       #Assuming each file has same sequence defined for the elements
                 set_elements_indices(line)
+    file.close()
 
 
 def display_specific_days_of_a_year(year):
