@@ -5,7 +5,7 @@ from colorama import Fore, Back, Style
 import sys
 
 #configurable variables
-files_folder = 'weatherdata/'
+files_folder =  None                #'/home/usman/Desktop/Training/Assignment-1-Weather-Man/weatherdata/'
 files_prefix = 'lahore_weather_'
 min_year = 1996
 max_year = 2011
@@ -18,7 +18,7 @@ def set_elements_indices(elements_str):
     elements = elements_str.split(',')
 
     for i,elem in enumerate(elements):
-        elements_indices_dict[elem.strip()] = i + 1
+        elements_indices_dict[elem.strip()] = i
 
 
 def get_file_contents_line_by_line(file_path):
@@ -53,6 +53,7 @@ def display_specific_days_of_a_year(year):
     max_temp_day = date(1970,1,1)
     min_temp_day = date(1970,1,1)
     max_humidity_day = date(1970,1,1)
+    fileCount = 0
 
     for month in calendar.month_abbr:
         if len(month) < 1:
@@ -62,6 +63,7 @@ def display_specific_days_of_a_year(year):
 
         if not os.path.exists(current_file_path):
             continue
+        fileCount += 1
 
         for line in get_file_contents_line_by_line(current_file_path):
 
@@ -82,6 +84,10 @@ def display_specific_days_of_a_year(year):
             if len(current_max_humidity) > 0 and float(current_max_humidity) > max_humidity:
                 max_humidity = float(current_max_humidity)
                 max_humidity_day = current_day
+
+    if fileCount < 1:
+        print('data not found')
+        quit()
 
     print('Highest: ' + '{:02d}'.format(round(max_temp)) + 'C on ' + calendar.month_name[max_temp_day.month] + ' ' + str(max_temp_day.day))
     print('Lowest: ' + '{:02d}'.format(round(min_temp)) + 'C on ' + calendar.month_name[min_temp_day.month] + ' ' + str(min_temp_day.day))
@@ -224,25 +230,30 @@ def draw_one_horizontal_bar_chart(year, month):
 
 if __name__ == '__main__':
 
-    option = sys.argv[1]
-    date = sys.argv[2]
-    files_folder = sys.argv[3]
+    try:
+        option = sys.argv[1]
+        year_month = sys.argv[2]
+        files_folder = sys.argv[3]
+    except:
+        print('3 Arguments are required', len(sys.argv) - 1, 'were given')
+        quit()
 
     if option == '-e':
         try:
-            year = int(date)
+            year = int(year_month)
 
             if year < min_year or year > max_year:
                 print('Year should be in between', min_year, 'and', max_year)
                 quit()
-
-            display_specific_days_of_a_year(year)
         except:
             print('INVALID Input')
+            quit()
+
+        display_specific_days_of_a_year(year)
 
     elif option == '-a':
         try:
-            year,month = [int(elem) for elem in date.split('/')]
+            year,month = [int(elem) for elem in year_month.split('/')]
 
             if year < min_year or year > max_year:
                 print('Year should be in between', min_year, 'and', max_year)
@@ -251,14 +262,15 @@ if __name__ == '__main__':
             if month < 1 or month > 12:
                 print('Month should be in between 1 and 12')
                 quit()
-
-            display_averages_of_a_month(year, month)
         except:
             print('INVALID Input')
+            quit()
+
+        display_averages_of_a_month(year, month)
 
     elif option == '-c':
         try:
-            year, month = [int(elem) for elem in date.split('/')]
+            year, month = [int(elem) for elem in year_month.split('/')]
 
             if year < min_year or year > max_year:
                 print('Year should be in between', min_year, 'and', max_year)
@@ -267,10 +279,14 @@ if __name__ == '__main__':
             if month < 1 or month > 12:
                 print('Month should be in between 1 and 12')
                 quit()
-
-            draw_two_horizontal_bar_charts(year, month)
         except:
             print('INVALID Input')
+
+        draw_two_horizontal_bar_charts(year, month)
+        print('----------------------------------------------')
+        print('----------------------------------------------')
+        print('----------------------------------------------')
+        draw_one_horizontal_bar_chart(year, month)
 
     else:
         print('Invalid Option Try Again')
