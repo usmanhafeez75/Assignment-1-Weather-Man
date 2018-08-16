@@ -213,9 +213,12 @@ def draw_one_horizontal_bar_chart(year, month):
 
         max_temp = elements[elements_indices_dict['Max TemperatureC']]
         min_temp = elements[elements_indices_dict['Min TemperatureC']]
+        missing_flag_max = False
+        missing_flag_min = False
 
         if len(max_temp) < 1:
-            print('Missing Data', end='')
+            print('Missing Data ', end='')
+            missing_flag_max = True
         else:
             max_temp = round(float(max_temp))
             [print(Fore.RED + '+', end='') for _ in range(max_temp)]
@@ -223,13 +226,23 @@ def draw_one_horizontal_bar_chart(year, month):
         print(Style.RESET_ALL, end='')
 
         if len(min_temp) < 1:
-            print('Missing Data', end='')
+            print('Missing Data ', end='')
+            missing_flag_min = True
         else:
             min_temp = round(float(min_temp))
             [print(Fore.BLUE + '+', end='') for _ in range(min_temp)]
 
         print(Style.RESET_ALL, end='')
-        print(' {:02d}C - {:02d}C'.format(min_temp, max_temp))
+
+        if not missing_flag_min:
+            print(' {:02d}C '.format(min_temp), end='')
+
+        print('- ', end='')
+
+        if not missing_flag_max:
+            print('{:02d}C'.format(max_temp), end='')
+
+        print()
 
 
 if __name__ == '__main__':
